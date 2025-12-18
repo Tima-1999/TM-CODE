@@ -96,3 +96,12 @@ function showView(id) {
 }
 
 if(currentUser) loginSuccess(currentUser);
+
+function toggleAuth() {
+    isLoginMode = !isLoginMode;
+    document.getElementById('auth-title').innerText = isLoginMode ? "Giriş" : "Registrasiýa";
+    document.getElementById('auth-btn').innerText = isLoginMode ? "Giriş Et" : "Hasap Aç";
+    document.getElementById('auth-toggle').innerHTML = isLoginMode ? 
+        `Hasap ýokmy? <a href="javascript:toggleAuth()" class="text-info">Täze açyň</a>` : 
+        `Hasabyňyz barmy? <a href="javascript:toggleAuth()" class="text-info">Giriş ediň</a>`;
+}
