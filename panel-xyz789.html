@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Gözegçilik | TM-CLOUD</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="admin-body">
+    <div id="admin-content" style="display: none;">
+        <div class="admin-panel">
+            <div class="sidebar">
+                <div class="brand"><i class="fas fa-user-shield"></i> <span>ADMIN</span></div>
+                <nav>
+                    <div class="nav-item active"><i class="fas fa-users"></i> Ähli Ulanyjylar</div>
+                    <a href="portal.html" class="nav-item" style="text-decoration:none; color:white;"><i class="fas fa-home"></i> Portala Dön</a>
+                    <div class="nav-item" onclick="exit()" style="cursor:pointer;"><i class="fas fa-power-off"></i> Çykyş</div>
+                </nav>
+            </div>
+
+            <div class="content">
+                <header>
+                    <h2>Sistemadaky Ähli Faýllar</h2>
+                    <div id="stats" style="font-size: 14px; color: #94a3b8;">Hasaplanýar...</div>
+                </header>
+
+                <div class="main-card">
+                    <div class="field-wrapper" style="margin-bottom: 20px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="admin-search" placeholder="Ulanyjy ýa-da faýl ady..." onkeyup="filterAdminFiles()">
+                    </div>
+
+                    <div id="full-file-list" class="file-list-grid">
+                        <p style="text-align:center; padding:20px;">Maglumatlar çekilýär...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // --- ADMIN BARLAGY ---
+        window.onload = () => {
+            const currentUser = localStorage.getItem("tm_user");
+            
+            // Diňe "admin" ady bilen girenler üçin rugsat berýäris
+            if (currentUser === "admin") {
+                document.getElementById('admin-content').style.display = "block";
+                loadAdminData();
+            } else {
+                alert("Siziň bu sahypa girmäge rugsadyňyz ýok!");
+                window.location.href = "index.html";
+            }
+        };
+
+        // --- MAGLUMATLARY ÝÜKLEMEK ---
+        function loadAdminData() {
+            db.ref('user_files').on('value', (snap) => {
+                const list = document.getElementById('full-file-list');
+                const stats = document.getElementById('stats');
+                list.innerHTML = "";
+                let fileCount = 0;
+
+                if (!snap.exists()) {
+                    list.innerHTML = "<p>Sistemada heniz faýl ýok.</p>";
+                    return;
+                }
+
+                snap.forEach(userSnap => {
+                    const userName = userSnap.key;
+                    userSnap.forEach(fileSnap => {
+                        fileCount++;
+                        const f = fileSnap.val();
+                        
+                        list.innerHTML += `
+                            <div class="file-item">
+                                <div class="f-info">
+                                    <small style="color:#3b82f6; font-weight:bold;">Ulanyjy: @${userName}</small>
+                                    <b style="display:block; margin-top:5px;">${f.name}</b>
+                                    <span>${f.time} | ${f.size || '?? MB'}</span>
+                                </div>
+                                <div class="f-actions">
+                                    <a href="${f.url}" target="_blank" class="btn-action download"><i class="fas fa-external-link-alt"></i></a>
+                                    <button onclick="adminDeleteFile('${userName}', '${fileSnap.key}')" class="btn-action delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>`;
+                    });
+                });
+                stats.innerText = "Jemi faýl: " + fileCount;
+            });
+        }
+
+        function adminDeleteFile(owner, fileId) {
+            if (confirm(owner + " ulanyjysynyň faýlyny pozmak isleýärsiňizmi?")) {
+                db.ref('user_files/' + owner + '/' + fileId).remove();
+            }
+        }
+
+        function filterAdminFiles() {
+            const term = document.getElementById('admin-search').value.toLowerCase();
+            const items = document.querySelectorAll('.file-item');
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(term) ? "flex" : "none";
+            });
+        }
+    </script>
+</body>
+</html>
