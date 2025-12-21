@@ -139,3 +139,59 @@ header { display: flex; justify-content: space-between; align-items: center; mar
 }
 
 .status-msg { color: var(--danger); font-size: 13px; text-align: center; }
+
+
+
+/* --- MOBIL SAZLAMALAR (Ekran 768px-den kiçi bolsa) --- */
+@media (max-width: 768px) {
+    .admin-panel {
+        flex-direction: column; /* Menýu we Mazmun aşak-aşak dursun */
+    }
+
+    .sidebar {
+        width: 100%; /* Menýu doly ekran bolsun */
+        min-height: auto;
+        padding: 15px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .sidebar nav {
+        display: flex;
+        gap: 10px; /* Menýu elementlerini ýanaşyk goý */
+    }
+
+    .sidebar .nav-item {
+        padding: 8px 12px;
+        font-size: 13px;
+        margin-bottom: 0;
+    }
+
+    .brand span {
+        display: none; /* Telefonda diňe ikonka görünsün, ýazgy gizlensin */
+    }
+
+    .content {
+        padding: 15px;
+        width: 100%;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .file-list-grid {
+        grid-template-columns: 1fr; /* Faýllar bir hatarda aşak-aşak dursun */
+    }
+
+    .user-badge {
+        width: 100%;
+        justify-content: center;
+    }
+}
