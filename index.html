@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş | TM-CLOUD</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-network-wired"></i>
+                <h2>Admin Giriş</h2>
+                <p>Ulgama girmek üçin maglumatlaryňyzy ýazyň.</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="input-row">
+                    <label>Ulanyjy ady</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="admin">
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label>Parol</label>
+                    </div>
+                    <div class="field-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••">
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <a href="forgot.html" style="color: #94a3b8; font-size: 12px; text-decoration: none; transition: 0.3s;">
+                            Paroly ýatdan çykardyňyzmy?
+                        </a>
+                    </div>
+                </div>
+                
+                <button onclick="handleLogin()" class="btn-submit" style="margin-top: 15px;">GIRIŞ</button>
+                
+                <p id="info-msg" class="status-msg"></p>
+            </div>
+            
+            <div class="login-footer">
+                <span>Hasabyňyz ýokmy?</span>
+                <a href="register.html">Täze hasap döret</a>
+            </div>
+        </div>
+    </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
