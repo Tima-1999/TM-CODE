@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasap Döretmek | TM-CLOUD</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-user-plus" style="color: #10b981;"></i>
+                <h2>Täze Hasap</h2>
+                <p>Ulgama girmek we paroly dikeltmek üçin maglumatlaryňyzy giriziň.</p>
+            </div>
+
+            <div class="login-form">
+                <div class="input-row">
+                    <label>Täze Login</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="reg-username" placeholder="Login saýlaň">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <label>Täze Parol</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Parol saýlaň">
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+
+                <div class="input-row">
+                    <label>Howpsuzlyk soragy (Parol ýatdan çyksa gerek bolar)</label>
+                    <div class="field-wrapper" style="background: #0f172a; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px;">
+                        <i class="fas fa-question-circle" style="left: 15px; position: absolute; color: #475569;"></i>
+                        <select id="reg-question" style="width: 100%; padding: 12px 12px 12px 45px; background: transparent; color: white; border: none; outline: none; cursor: pointer; -webkit-appearance: none;">
+                            <option value="Iň gowy görýän reňkiňiz?" style="background: #1e293b;">Iň gowy görýän reňkiňiz?</option>
+                            <option value="Itiňiziň ady näme?" style="background: #1e293b;">Itiňiziň ady näme?</option>
+                            <option value="Doglan şäheriňiz?" style="background: #1e293b;">Doglan şäheriňiz?</option>
+                            <option value="Ilkinji mekdebiňiziň ady?" style="background: #1e293b;">Ilkinji mekdebiňiziň ady?</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <label>Soragyň jogaby</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-comment-dots"></i>
+                        <input type="text" id="reg-answer" placeholder="Jogabyňyz (kiçi harplar bilen)">
+                    </div>
+                </div>
+
+                <button onclick="handleRegister()" class="btn-submit" style="background: #10b981; margin-top: 10px;">HASAP DÖRET</button>
+                <p id="reg-msg" class="status-msg"></p>
+            </div>
+
+            <div class="login-footer">
+                <span>Hasabyňyz barmy?</span>
+                <a href="index.html" style="color: #10b981;">Giriş sahypasyna geç</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
