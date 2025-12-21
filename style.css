@@ -1,1 +1,141 @@
+/* --- Esasy Sazlamalar --- */
+:root {
+    --primary: #3b82f6;
+    --dark-bg: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.1);
+    --danger: #ef4444;
+    --success: #10b981;
+}
 
+* { box-sizing: border-box; }
+
+body {
+    margin: 0; padding: 0;
+    background-color: var(--dark-bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+/* --- Giriş Sahypasy (index.html) --- */
+.login-page {
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border: 1px solid var(--border);
+}
+
+.login-header { text-align: center; margin-bottom: 30px; }
+.login-header i { font-size: 48px; color: var(--primary); margin-bottom: 15px; }
+.login-header h2 { margin: 0; font-size: 26px; }
+.login-header p { color: var(--text-muted); font-size: 14px; margin-top: 8px; }
+
+.input-row { margin-bottom: 20px; }
+.input-row label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+
+.field-wrapper { position: relative; display: flex; align-items: center; }
+.field-wrapper i { position: absolute; left: 15px; color: #475569; }
+
+.field-wrapper input {
+    width: 100%;
+    padding: 12px 12px 12px 45px;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+.field-wrapper input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+
+.btn-submit {
+    width: 100%; padding: 14px;
+    background: var(--primary);
+    color: white; border: none;
+    border-radius: 10px; font-weight: bold;
+    cursor: pointer; font-size: 16px; transition: 0.3s;
+}
+.btn-submit:hover { background: #2563eb; transform: translateY(-1px); }
+
+/* --- Admin Panel (portal.html) Layout --- */
+.admin-panel { display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 260px; background: #0b1120;
+    border-right: 1px solid var(--border);
+    padding: 30px 20px;
+}
+
+.brand { font-size: 22px; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+
+.nav-item {
+    padding: 12px 15px; border-radius: 10px;
+    color: var(--text-muted); cursor: pointer;
+    transition: 0.3s; margin-bottom: 5px;
+    display: flex; align-items: center; gap: 10px;
+}
+.nav-item:hover, .nav-item.active { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
+
+.content { flex: 1; padding: 40px; overflow-y: auto; }
+
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.user-badge { background: var(--card-bg); padding: 8px 15px; border-radius: 30px; border: 1px solid var(--border); font-size: 14px; }
+
+.main-card { background: var(--card-bg); padding: 25px; border-radius: 16px; border: 1px solid var(--border); }
+
+/* --- Faýl Sanawy Dizaýny --- */
+.file-list-grid { display: grid; gap: 12px; margin-top: 20px; }
+
+.file-item {
+    display: flex; align-items: center;
+    background: #1e293b;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: 0.3s;
+}
+.file-item:hover { transform: translateX(5px); border-color: var(--primary); background: #243147; }
+
+.f-icon {
+    font-size: 20px; color: var(--primary);
+    width: 45px; height: 45px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(59, 130, 246, 0.1); border-radius: 10px;
+}
+
+.f-info { flex: 1; margin-left: 15px; }
+.f-info b { display: block; font-size: 15px; margin-bottom: 3px; }
+.f-info span { font-size: 12px; color: var(--text-muted); }
+
+.f-actions { display: flex; gap: 10px; }
+
+.btn-action {
+    background: #0f172a; border: 1px solid var(--border);
+    color: var(--text-muted); padding: 8px;
+    border-radius: 8px; cursor: pointer; transition: 0.2s;
+}
+.btn-action.download:hover { color: var(--success); border-color: var(--success); }
+.btn-action.delete:hover { color: var(--danger); border-color: var(--danger); }
+
+/* Progress Bar */
+#progress-container { width: 100%; background: #0f172a; height: 8px; border-radius: 10px; margin-top: 15px; overflow: hidden; }
+#progress-bar { height: 100%; background: var(--primary); transition: width 0.4s ease; }
+
+.btn-primary {
+    background: var(--primary); color: white; border: none;
+    padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+}
+
+.status-msg { color: var(--danger); font-size: 13px; text-align: center; }
