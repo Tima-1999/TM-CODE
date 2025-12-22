@@ -294,3 +294,37 @@ function filterFiles() {
         item.style.display = name.includes(term) ? "flex" : "none";
     });
 }
+
+
+
+// --- JEMI TÄZELENEN LOGIKA ---
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+// Sahypa ýüklenende temany barla
+window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+});
+
+// Kämil Gözleg Funksiýasy
+function filterFiles() {
+    const term = document.getElementById('file-search').value.toLowerCase();
+    const items = document.querySelectorAll('.file-item');
+    items.forEach(item => {
+        const name = item.querySelector('b').innerText.toLowerCase();
+        if(name.includes(term)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+// Faýl ýükleýiş (Tizlik we % bilen) - Öňki XMLHttpRequest kody bärde dowam edýär
+// ... (Ýokarda beren XMLHttpRequest uploadFile funksiýaňy bärde ulan)
