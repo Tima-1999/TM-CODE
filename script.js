@@ -90,7 +90,7 @@ function handleRegister() {
 }
 
 // --- FAÝL ÝÜKLEMEK ---
-async function uploadFile() {
+function uploadFile() {
     const fileSelector = document.getElementById('file-selector');
     const file = fileSelector.files[0];
     const pBar = document.getElementById('progress-bar');
@@ -99,54 +99,60 @@ async function uploadFile() {
 
     if (!file) return alert("Faýl saýlaň!");
 
-    // Mugt hasap üçin 10MB çägi barlaň (Raw faýllar üçin)
-    if (file.size > 10 * 1024 * 1024 && !file.type.startsWith('video/')) {
-        alert("Mugt hasapda faýl ölçegi 10MB-dan uly bolmaly däl!");
-        return;
-    }
-
     pContainer.style.display = "block";
-    pBar.style.width = "10%"; // Ýüklenip başlandy
-
+    
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
-    
-    // MÖHÜM: Cloudinary ähli faýl görnüşlerini kabul etmegi üçin 'auto' ulanmaly
-    const resourceType = "auto"; 
 
-    try {
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
-            method: 'POST',
-            body: formData
-        });
+    const xhr = new XMLHttpRequest();
+    const startTime = new Date().getTime(); // Başlangyç wagty
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error.message);
-        }
-
-        const data = await response.json();
-
-        if (data.secure_url) {
-            const fileSizeMB = (data.bytes / (1024 * 1024)).toFixed(2) + " MB";
+    // ÝÜKLENIŞ PROSESINI YZARLAMAK
+    xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+            // Göterimi hasaplamak
+            const percentComplete = Math.round((e.loaded / e.total) * 100);
             
-            await db.ref('user_files/' + user).push({
+            // Tizligi hasaplamak (MB/s)
+            const currentTime = new Date().getTime();
+            const duration = (currentTime - startTime) / 1000; // sekunt
+            const bps = e.loaded / duration; // bytes per second
+            const mbps = (bps / (1024 * 1024)).toFixed(2); // MB/s
+
+            // Ekrana çykarmak
+            pBar.style.width = percentComplete + "%";
+            pBar.innerHTML = `${percentComplete}% | ${mbps} MB/s`;
+            
+            if (percentComplete === 100) {
+                pBar.innerHTML = "Serwere ýazylyp dur, garaşyň...";
+            }
+        }
+    };
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+            // Firebase-e ýazmak
+            db.ref('user_files/' + user).push({
                 name: file.name,
                 url: data.secure_url,
                 size: fileSizeMB,
                 time: new Date().toLocaleString()
+            }).then(() => {
+                pBar.innerHTML = "Şowly ýüklendi!";
+                setTimeout(() => { location.reload(); }, 1000);
             });
-
-            pBar.style.width = "100%";
-            pBar.innerText = "Gutarlandy!";
-            setTimeout(() => { location.reload(); }, 1000);
+        } else {
+            alert("Ýüklemekde hata döredi!");
+            pContainer.style.display = "none";
         }
-    } catch (e) {
-        console.error("Hata:", e);
-        alert("Ýüklemek başartmady: " + e.message);
-        pContainer.style.display = "none";
-    }
+    };
+
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, true);
+    xhr.send(formData);
 }
 
 // --- FAÝLLARY GÖRKEZMEK ---
