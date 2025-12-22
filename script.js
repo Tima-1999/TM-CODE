@@ -9,11 +9,14 @@ const firebaseConfig = {
     databaseURL: "https://tm-online-chat-default-rtdb.firebaseio.com"
 };
 
-if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+// Firebase-i ygtybarly işe girizmek
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.database();
 
 // --- SAHYPA ÝÜKLENENDE ---
-window.onload = () => {
+window.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem("tm_user");
     const displayElement = document.getElementById('display-user');
     
@@ -22,6 +25,7 @@ window.onload = () => {
         document.body.classList.add('dark-mode');
     }
 
+    // Eger portal sahypasynda bolsak we login edilmedik bolsa yzyna ugrat
     if (window.location.pathname.includes("portal.html")) {
         if (!user) {
             window.location.href = "index.html";
@@ -30,11 +34,38 @@ window.onload = () => {
             loadFiles(user);
         }
     }
-};
+});
+
+// --- GIRIŞ (LOGIN) FUNKSIÝASY (Möhüm: Bu kody hem goşmaly) ---
+function handleLogin() {
+    const user = document.getElementById('username').value.trim().toLowerCase();
+    const pass = document.getElementById('password').value.trim();
+    const msg = document.getElementById('info-msg');
+
+    if (!user || !pass) {
+        msg.innerText = "Login we paroly ýazyň!";
+        return;
+    }
+
+    db.ref('users/' + user).once('value', (snap) => {
+        if (snap.exists()) {
+            if (snap.val().password === pass) {
+                localStorage.setItem("tm_user", user);
+                window.location.href = "portal.html";
+            } else {
+                msg.innerText = "Parol ýalňyş!";
+            }
+        } else {
+            msg.innerText = "Ulanyjy tapylmady!";
+        }
+    });
+}
 
 // --- GÖZLEG FUNKSIÝASY ---
 function filterFiles() {
-    const term = document.getElementById('file-search').value.toLowerCase();
+    const searchInput = document.getElementById('file-search');
+    if (!searchInput) return;
+    const term = searchInput.value.toLowerCase();
     const items = document.querySelectorAll('.file-item');
     items.forEach(item => {
         const name = item.querySelector('b').innerText.toLowerCase();
@@ -45,10 +76,11 @@ function filterFiles() {
 // --- DARK MODE ---
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
-    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
 }
 
-// --- FAÝL ÝÜKLEMEK (XMLHttpRequest bilen hakyky % we tizlik) ---
+// --- FAÝL ÝÜKLEMEK ---
 function uploadFile() {
     const fileSelector = document.getElementById('file-selector');
     const file = fileSelector.files[0];
@@ -57,6 +89,12 @@ function uploadFile() {
     const user = localStorage.getItem("tm_user");
 
     if (!file) return alert("Faýl saýlaň!");
+    
+    // Cloudinary mugt çägi (Meselem 10MB) barlagy
+    if (file.size > 10 * 1024 * 1024) {
+        return alert("Faýl gaty uly! Maksimum 10MB ýükläp bilersiňiz.");
+    }
+
     pContainer.style.display = "block";
     
     const formData = new FormData();
@@ -70,7 +108,7 @@ function uploadFile() {
         if (e.lengthComputable) {
             const percent = Math.round((e.loaded / e.total) * 100);
             const duration = (new Date().getTime() - startTime) / 1000;
-            const mbps = ((e.loaded / duration) / (1024 * 1024)).toFixed(2);
+            const mbps = duration > 0 ? ((e.loaded / duration) / (1024 * 1024)).toFixed(2) : 0;
             pBar.style.width = percent + "%";
             pBar.innerHTML = `${percent}% | ${mbps} MB/s`;
         }
@@ -90,7 +128,7 @@ function uploadFile() {
                 setTimeout(() => location.reload(), 1000);
             });
         } else {
-            alert("Siz mugt Cloudinary çäginden (10MB) uly faýl ýüklejek bolýarsyňyz!");
+            alert("Ýüklemede ýalňyşlyk ýüze çykdy!");
             pContainer.style.display = "none";
         }
     };
@@ -104,6 +142,12 @@ function loadFiles(user) {
         const list = document.getElementById('file-list');
         if (!list) return;
         list.innerHTML = "";
+        
+        if (!snap.exists()) {
+            list.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Heniz faýlyňyz ýok.</p>";
+            return;
+        }
+
         snap.forEach(child => {
             const f = child.val();
             const ext = f.name.split('.').pop().toLowerCase();
@@ -113,7 +157,7 @@ function loadFiles(user) {
             if(ext === 'pdf') icon = "fa-file-pdf";
 
             list.innerHTML += `
-                <div class="file-item" style="animation: fadeIn 0.4s ease forwards;">
+                <div class="file-item">
                     <div class="f-icon"><i class="fas ${icon}"></i></div>
                     <div class="f-info">
                         <b>${f.name}</b>
