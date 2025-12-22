@@ -195,3 +195,46 @@ header { display: flex; justify-content: space-between; align-items: center; mar
         justify-content: center;
     }
 }
+
+
+/* --- Öňki kodlara goşmaça --- */
+
+/* Düwme Hover Effektleri */
+.btn-primary, .btn-submit, .btn-action {
+    transition: all 0.3s ease;
+}
+.btn-primary:hover, .btn-submit:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Gözleg Meýdançasy */
+.search-box input {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    padding: 8px 15px;
+    border-radius: 20px;
+    color: white;
+    outline: none;
+    width: 200px;
+    transition: 0.3s;
+}
+.search-box input:focus { width: 250px; border-color: var(--primary); }
+
+/* Dark Mode Klasy */
+body.dark-mode {
+    --dark-bg: #050505;
+    --card-bg: #111111;
+}
+
+.dark-input {
+    width:100%; padding:12px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:white; outline:none;
+}
+
+/* Faýl item animasýasy */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.file-item { animation: fadeIn 0.4s ease forwards; }
