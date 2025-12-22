@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="tk">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TM-CLOUD | Portal</title>
+    <title>TM-CLOUD | Şahsy Bulut Ammaryňyz</title>
+    <meta name="description" content="TM-CLOUD - Ygtybarly we çalt faýl ammary. Faýllaryňyzy bulutda saklaň.">
+    <meta name="keywords" content="cloud storage, bulut ammary, faýl saklamak, TM-CLOUD">
+    <meta property="og:title" content="TM-CLOUD | Bulut Ammary">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
@@ -14,6 +17,9 @@
             <div class="brand"><i class="fas fa-cloud"></i> <span>TM-CLOUD</span></div>
             <nav>
                 <div class="nav-item active"><i class="fas fa-folder"></i> Faýllarym</div>
+                <div class="nav-item" onclick="toggleDarkMode()" style="cursor: pointer;">
+                    <i class="fas fa-moon"></i> Garaňky Režim
+                </div>
                 <div class="nav-item" onclick="openPassModal()" style="cursor: pointer; color: #f59e0b;">
                     <i class="fas fa-key"></i> Paroly Üýtgetmek
                 </div>
@@ -24,8 +30,13 @@
         <div class="content">
             <header>
                 <h2>Şahsy Bulut Ammaryňyz</h2>
-                <div class="user-badge">
-                    <span id="display-user">...</span> <i class="fas fa-user-shield"></i>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div class="search-box">
+                        <input type="text" id="file-search" placeholder="Faýl gözle..." onkeyup="filterFiles()">
+                    </div>
+                    <div class="user-badge">
+                        <span id="display-user">...</span> <i class="fas fa-user-shield"></i>
+                    </div>
                 </div>
             </header>
 
@@ -40,11 +51,13 @@
                         <i class="fas fa-info-circle"></i> Faýllaryňyz Cloudinary ammarynda ygtybarly saklanar.
                     </p>
                 </div>
-               <div id="progress-container" style="display:none; margin-top:15px; background:#1e293b; border-radius:8px; overflow: hidden; height: 25px; border: 1px solid #334155;">
-    <div id="progress-bar" style="width:0%; height:100%; background: linear-gradient(90deg, #3b82f6, #2dd4bf); transition: width 0.2s; color: white; font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-        0%
-    </div>
-</div>
+                
+                <div id="progress-container" style="display:none; margin-top:15px; background:#1e293b; border-radius:8px; overflow: hidden; height: 25px; border: 1px solid #334155;">
+                    <div id="progress-bar" style="width:0%; height:100%; background: linear-gradient(90deg, #3b82f6, #2dd4bf); transition: width 0.2s; color: white; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        0%
+                    </div>
+                </div>
+            </div>
 
             <div class="main-card" style="margin-top: 25px;">
                 <h3><i class="fas fa-list"></i> Meniň Faýllarym</h3>
@@ -65,20 +78,19 @@
             <div class="login-header">
                 <i class="fas fa-shield-alt" style="color: #f59e0b; font-size: 30px; margin-bottom: 10px;"></i>
                 <h3>Paroly Täzelemek</h3>
-                <p>Howpsuzlyk üçin köne we täze paroluňyzy giriziň.</p>
             </div>
             <div class="login-form">
                 <div class="input-row">
                     <label>Köne Parol</label>
-                    <input type="password" id="old-pass" style="width:100%; padding:12px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:white; outline:none;">
+                    <input type="password" id="old-pass" class="dark-input">
                 </div>
                 <div class="input-row">
                     <label>Täze Parol</label>
-                    <input type="password" id="change-new-pass" style="width:100%; padding:12px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:white; outline:none;">
+                    <input type="password" id="change-new-pass" class="dark-input">
                 </div>
                 <button onclick="changeUserPassword()" class="btn-submit" style="background: #10b981;">TÄZELE</button>
                 <button onclick="closePassModal()" class="btn-submit" style="background: #64748b; margin-top:10px;">ÝATYRYŇ</button>
-                <p id="change-msg" class="status-msg" style="text-align:center; margin-top:10px;"></p>
+                <p id="change-msg" class="status-msg"></p>
             </div>
         </div>
     </div>
