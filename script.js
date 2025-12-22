@@ -97,32 +97,56 @@ async function uploadFile() {
     const pContainer = document.getElementById('progress-container');
     const user = localStorage.getItem("tm_user");
 
-    if (!file) return;
+    if (!file) return alert("Faýl saýlaň!");
+
+    // Mugt hasap üçin 10MB çägi barlaň (Raw faýllar üçin)
+    if (file.size > 10 * 1024 * 1024 && !file.type.startsWith('video/')) {
+        alert("Mugt hasapda faýl ölçegi 10MB-dan uly bolmaly däl!");
+        return;
+    }
+
     pContainer.style.display = "block";
-    pBar.style.width = "30%";
+    pBar.style.width = "10%"; // Ýüklenip başlandy
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
+    
+    // MÖHÜM: Cloudinary ähli faýl görnüşlerini kabul etmegi üçin 'auto' ulanmaly
+    const resourceType = "auto"; 
 
     try {
         const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
-            method: 'POST', body: formData
+            method: 'POST',
+            body: formData
         });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error.message);
+        }
+
         const data = await response.json();
 
         if (data.secure_url) {
             const fileSizeMB = (data.bytes / (1024 * 1024)).toFixed(2) + " MB";
-            db.ref('user_files/' + user).push({
+            
+            await db.ref('user_files/' + user).push({
                 name: file.name,
                 url: data.secure_url,
                 size: fileSizeMB,
                 time: new Date().toLocaleString()
             });
+
             pBar.style.width = "100%";
-            setTimeout(() => { location.reload(); }, 500);
+            pBar.innerText = "Gutarlandy!";
+            setTimeout(() => { location.reload(); }, 1000);
         }
-    } catch (e) { alert("Ýüklemekde hata döredi!"); }
+    } catch (e) {
+        console.error("Hata:", e);
+        alert("Ýüklemek başartmady: " + e.message);
+        pContainer.style.display = "none";
+    }
 }
 
 // --- FAÝLLARY GÖRKEZMEK ---
