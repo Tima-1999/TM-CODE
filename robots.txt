@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /panel-xyz789.html
+
+Sitemap: https://tmbulut.vercel.app/sitemap.xml
